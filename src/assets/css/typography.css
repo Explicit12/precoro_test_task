@@ -1,0 +1,51 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@500;600&display=swap");
+@import url("./base.css");
+
+/* general */
+.text-medium {
+  font-family: var(--f-inter);
+  font-style: normal;
+  font-weight: 500;
+}
+
+.text-semi-bold {
+  font-family: var(--f-inter);
+  font-style: normal;
+  font-weight: 600;
+}
+
+/* font sizes */
+.text-sm {
+  font-size: 0.75rem;
+}
+
+.text-md {
+  font-size: 1rem;
+  line-height: 144%;
+}
+
+.text-lg {
+  font-size: 1.5rem;
+  line-height: 133%;
+}
+
+/* font colors */
+.text-primary {
+  color: var(--c-primary);
+}
+
+.text-active {
+  color: var(--c-active);
+}
+
+.text-secondary {
+  color: var(--c-secondary);
+}
+
+.text-secondary-dark {
+  color: var(--c-secondary-dark);
+}
+
+.text-danger {
+  color: var(--c-danger);
+}
