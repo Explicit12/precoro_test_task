@@ -30,6 +30,7 @@
 
     display: flex;
     justify-content: center;
+    padding: 0 1rem;
     padding-top: var(--gap-9);
     box-sizing: border-box;
 
@@ -38,6 +39,11 @@
   }
 
   .modal__content {
+    /* width: 100%; */
+    max-width: var(--br-lg);
+
+    overflow: hidden;
+
     padding: var(--gap-7);
     height: fit-content;
 
