@@ -19,14 +19,33 @@
 
     <Teleport to="body">
       <AppModal class="modal" :is-open="isModelOpen">
-        <header class="modal__header">
-          <h2 class="text-semi-bold text-lg text-primary">Invite User</h2>
-          <AppButton icon aria-label="Close button">
-            <IconClose class="close-icon" @click="() => (isModelOpen = false)" />
-          </AppButton>
-        </header>
+        <template #header>
+          <header class="modal__header">
+            <h2 class="text-semi-bold text-lg text-primary">Invite User</h2>
+            <AppButton icon aria-label="Close button">
+              <IconClose class="close-icon" @click="() => (isModelOpen = false)" />
+            </AppButton>
+          </header>
+          <TabButtonGroup :tabs="tabs" v-model="currentTab" />
+        </template>
 
-        <TabButtonGroup :tabs="tabs" v-model="currentTab" />
+        <template #content>
+          <div class="content-modal">
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo, impedit! Rerum maxime aut recusandae iure
+              repellat accusantium, voluptatem quae delectus, sequi rem incidunt voluptates fugiat molestiae asperiores
+              suscipit. Excepturi, eligendi.
+            </p>
+          </div>
+        </template>
+
+        <template #footer>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo, impedit! Rerum maxime aut recusandae iure
+            repellat accusantium, voluptatem quae delectus, sequi rem incidunt voluptates fugiat molestiae asperiores
+            suscipit. Excepturi, eligendi.
+          </p>
+        </template>
       </AppModal>
     </Teleport>
   </main>
@@ -54,5 +73,9 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+  }
+
+  .content-modal {
+    display: flex;
   }
 </style>

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+  import AppSeparator from "./AppSeparator.vue";
+
   interface Props {
     isOpen?: boolean;
   }
@@ -10,7 +12,19 @@
   <Transition name="background">
     <div class="modal" v-if="isOpen">
       <div class="modal__content">
-        <slot />
+        <div class="modal__container">
+          <slot name="header" />
+        </div>
+
+        <AppSeparator />
+        <div class="modal__container">
+          <slot name="content" />
+        </div>
+
+        <AppSeparator />
+        <div class="modal__container">
+          <slot name="footer" />
+        </div>
       </div>
     </div>
   </Transition>
@@ -39,18 +53,27 @@
   }
 
   .modal__content {
-    /* width: 100%; */
     max-width: var(--br-lg);
+    height: fit-content;
 
     overflow: hidden;
-
-    padding: var(--gap-7);
-    height: fit-content;
 
     background-color: var(--white);
     border-radius: var(--radius-md);
     box-shadow: var(--shadow-md);
   }
+
+  .modal__container {
+    padding: 0 var(--gap-7);
+  }
+
+  .modal__container:first-child {
+    padding-top: var(--gap-7);
+  }
+
+  .modal__container:last-child {
+    padding-bottom: var(--gap-7);
+  } 
 
   .background-enter-active,
   .background-leave-active {

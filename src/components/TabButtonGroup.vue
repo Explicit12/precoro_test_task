@@ -47,6 +47,7 @@
     align-items: center;
 
     padding: 0;
+    margin: 0;
     width: max-content;
   }
 
