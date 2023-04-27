@@ -1,7 +1,12 @@
 <script setup lang="ts">
   import IconCheckBox from "../icons/IconCheckBox.vue";
 
-  const props = defineProps<{ modelValue: boolean | string[]; value?: string }>();
+  interface Props {
+    modelValue?: boolean | string[];
+    value?: string;
+  }
+
+  const props = withDefaults(defineProps<Props>(), { modelValue: false });
   const emit = defineEmits<{ (e: "update:modelValue", checked: boolean | string[]): void }>();
 
   const warnMassage = "Value attribute is requred when multiple checkboxed used";
@@ -10,12 +15,13 @@
     const target = event.target as HTMLInputElement;
     const isMultiCheckBox = Array.isArray(props.modelValue);
 
+    // if (!props.modelValue) return;
     if (isMultiCheckBox && !props.value) console.warn(warnMassage);
 
     if (isMultiCheckBox && target.checked) {
-      emit("update:modelValue", [...props.modelValue, target.value]);
+      emit("update:modelValue", [...(props.modelValue as []), target.value]);
     } else if (isMultiCheckBox && !target.checked) {
-      const filteredValues = props.modelValue.filter((value) => value !== target.value);
+      const filteredValues = (props.modelValue as []).filter((value) => value !== target.value);
       emit("update:modelValue", filteredValues);
     }
 
@@ -27,13 +33,7 @@
 
 <template>
   <label class="checkbox">
-    <input
-      v-bind="$attrs"
-      @input="onInput"
-      :value="value"
-      type="checkbox"
-      class="origin-checkbox"
-    />
+    <input v-bind="$attrs" @input="onInput" :value="value" type="checkbox" class="origin-checkbox" />
     <span class="checkmark">
       <IconCheckBox class="checkmark-icon" />
     </span>
