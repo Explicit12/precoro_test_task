@@ -5,8 +5,10 @@
   import AppModal from "./components/AppModal.vue";
   import IconClose from "./components/icons/IconClose.vue";
   import TabButtonGroup from "./components/TabButtonGroup.vue";
+  import CheckBox from "./components/inputs/CheckBox.vue";
 
   const isModelOpen = ref(false);
+  const checkbox = ref(true);
 
   const tabs = new Set(["Main Info", "Available Locations", "Roles"]);
   const currentTab = ref([...tabs][0]);
@@ -31,7 +33,7 @@
 
         <template #content>
           <div class="content-modal">
-            <p>
+            <p class="text-medium">
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo, impedit! Rerum maxime aut recusandae iure
               repellat accusantium, voluptatem quae delectus, sequi rem incidunt voluptates fugiat molestiae asperiores
               suscipit. Excepturi, eligendi.
@@ -40,7 +42,7 @@
         </template>
 
         <template #footer>
-          <p>
+          <p class="text-medium">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo, impedit! Rerum maxime aut recusandae iure
             repellat accusantium, voluptatem quae delectus, sequi rem incidunt voluptates fugiat molestiae asperiores
             suscipit. Excepturi, eligendi.
@@ -48,6 +50,10 @@
         </template>
       </AppModal>
     </Teleport>
+
+    <CheckBox v-model="checkbox">
+      Hello wrold
+    </CheckBox>
   </main>
 </template>
 
