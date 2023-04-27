@@ -1,10 +1,10 @@
 <script setup lang="ts">
-  import { ref } from "vue";
+  import { ref, watch } from "vue";
 
   import TabButton from "./TabButton.vue";
 
   // Set required to prevet tab names duplication
-  const props = defineProps<{ tabs: Set<string>; modelValue?: string }>();
+  const props = defineProps<{ tabs: Set<string>; modelValue: string }>();
   const emit = defineEmits<{ (e: "update:modelValue", currentTab: string): void }>();
 
   const currentTabIndex = ref([...props.tabs].findIndex((value) => value === props.modelValue) || 0);
@@ -14,6 +14,13 @@
     if (tabIndex > currentTabIndex) return "default";
     return "active";
   }
+
+  watch(
+    () => props.modelValue,
+    (newVal) => {
+      changeActiveTab([...props.tabs].findIndex((tab) => tab === newVal));
+    },
+  );
 
   function changeActiveTab(tabIndex: number): void {
     currentTabIndex.value = tabIndex;
