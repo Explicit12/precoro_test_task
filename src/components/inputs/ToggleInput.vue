@@ -5,6 +5,7 @@
 <template>
   <label class="toggle">
     <input
+      :checked="modelValue"
       v-bind="$attrs"
       @input="$emit('update:modelValue', ($event.target as HTMLInputElement).checked)"
       type="checkbox"
