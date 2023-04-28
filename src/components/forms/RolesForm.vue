@@ -62,8 +62,8 @@
         viewOnly: viewOnly.value,
         create: create.value,
         approve: approve.value,
-        pay: pay.value
-      }
+        pay: pay.value,
+      },
     };
 
     useFormData(data);
