@@ -60,7 +60,6 @@
 <style scoped>
   .main-info-form {
     display: flex;
-    justify-content: center;
     gap: var(--gap-6);
     flex-direction: column;
     width: 100%;
