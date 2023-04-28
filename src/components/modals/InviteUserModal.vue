@@ -138,8 +138,18 @@
 
   .modal__footer {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--gap-5);
+  }
+
+  @media screen and (min-width: 640px) {
+    .modal__footer {
+      gap: 0;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
   }
 
   .user-info-from-toggle {
