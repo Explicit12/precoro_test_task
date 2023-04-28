@@ -14,6 +14,7 @@
   import MainInfoForm from "../forms/MainInfoForm.vue";
   import AvailableLocationsForm from "../forms/AvailableLocationsForm.vue";
   import RolesForm from "../forms/RolesForm.vue";
+  import AppMessage from "../AppMessage.vue";
 
   const emit = defineEmits<{ (e: "closeClick"): void }>();
 
@@ -71,6 +72,15 @@
         </KeepAlive>
       </div>
 
+      <div class="roles-massage-wrapper">
+        <AppMessage class="roles-massage" v-if="currentTab === 'Roles'">
+          <IconInfoVue class="info-icon" />
+          <span class="roles-massage__text">
+            The user becomes a Power user if at least ONE of the following roles is selected: Approve, View only,
+            Configuration, Suppliers and Items, Budgets, Warehouse manager.
+          </span>
+        </AppMessage>
+      </div>
       <AppSeparator />
 
       <div class="modal__footer">
@@ -136,5 +146,18 @@
     display: flex;
     align-items: center;
     gap: var(--gap-3);
+  }
+
+  .roles-massage-wrapper {
+    padding: var(--gap-7);
+  }
+
+  .roles-massage {
+    display: flex;
+    gap: var(--gap-2);
+  }
+
+  .roles-massage__text {
+    max-width: 580px;
   }
 </style>
