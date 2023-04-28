@@ -18,7 +18,7 @@
   const tabs = ["Main Info", "Available Locations", "Roles"];
   const forms = [MainInfoForm, AvailableLocationsForm, RolesForm];
   const currentTab = ref(tabs[0]);
-  const AllCompanies = ref(false);
+  const allCompanies = ref(false);
 
   const currentTabIndex = computed(() => tabs.findIndex((tab) => currentTab.value === tab));
   const isLastTab = computed(() => currentTabIndex.value === tabs.length - 1);
@@ -49,7 +49,7 @@
 
       <div class="modal__content">
         <KeepAlive>
-          <component :is="forms[currentTabIndex]" />
+          <component @company-change="() => allCompanies = false" :active-all-companies="allCompanies" :is="forms[currentTabIndex]" />
         </KeepAlive>
       </div>
 
@@ -57,7 +57,7 @@
 
       <div class="modal__footer">
         <div class="user-info-from-toggle" v-if="currentTab === 'Main Info'">
-          <ToggleInput v-model="AllCompanies" label="Active in all companies" />
+          <ToggleInput v-model="allCompanies" label="Active in all companies" />
           <span class="text-medium text-md text-primary">
             Active in all companies
           </span>
@@ -73,6 +73,7 @@
 </template>
 
 <style scoped>
+  
   .close-icon, .info-icon {
     fill: var(--c-secondary-dark);
     stroke: var(--c-secondary-dark);
