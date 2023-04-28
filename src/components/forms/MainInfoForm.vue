@@ -1,5 +1,7 @@
 <script setup lang="ts">
-  import { onBeforeMount, ref, watch } from "vue";
+  import { onBeforeMount, onDeactivated, ref, watch } from "vue";
+
+  import useFormData from "../../composables/useFormData";
 
   import TextInput from "../inputs/TextInput.vue";
   import AppSelect from "../inputs/AppSelect.vue";
@@ -34,6 +36,19 @@
     } else {
       availableCompany.value = companies[0];
     }
+  });
+
+  onDeactivated(() => {
+    const data = {
+      firstName: firstName.value,
+      lastName: lastName.value,
+      email: email.value,
+      position: position.value,
+      phoneNumber: phoneNumber.value,
+      availableCompany: availableCompany.value,
+    };
+
+    useFormData(data);
   });
 </script>
 

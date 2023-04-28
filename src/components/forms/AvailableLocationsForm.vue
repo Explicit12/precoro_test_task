@@ -1,5 +1,7 @@
 <script setup lang="ts">
-  import { ref, watch } from "vue";
+  import { ref, watch, onDeactivated } from "vue";
+
+  import useFormData from "@/composables/useFormData";
 
   import CheckBox from "../inputs/CheckBox.vue";
   import AppSelect from "../inputs/AppSelect.vue";
@@ -23,6 +25,15 @@
 
   watch(selectAll, (newVal) => {
     if (newVal) choicedLocations.value = [...availableLocations];
+  });
+
+  onDeactivated(() => {
+    const data = {
+      mainLocation: choicedLocations.value,
+      locations: choicedLocations.value,
+    };
+
+    useFormData(data);
   });
 </script>
 

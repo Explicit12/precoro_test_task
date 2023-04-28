@@ -1,5 +1,8 @@
 <script setup lang="ts">
-  import { ref, computed } from "vue";
+  import { ref, computed, onUnmounted } from "vue";
+
+  import useFormData from "@/composables/useFormData";
+  import { sendInveUserInfo } from "../../api/api";
 
   import AppButton from "../AppButton.vue";
   import AppModal from "../AppModal.vue";
@@ -8,17 +11,17 @@
   import ToggleInput from "../inputs/ToggleInput.vue";
   import AppSeparator from "../AppSeparator.vue";
   import IconInfoVue from "../icons/IconInfo.vue";
-
   import MainInfoForm from "../forms/MainInfoForm.vue";
   import AvailableLocationsForm from "../forms/AvailableLocationsForm.vue";
   import RolesForm from "../forms/RolesForm.vue";
 
-  defineEmits<{ (e: "closeClick"): void }>();
+  const emit = defineEmits<{ (e: "closeClick"): void }>();
 
   const tabs = ["Main Info", "Available Locations", "Roles"];
   const forms = [MainInfoForm, AvailableLocationsForm, RolesForm];
   const currentTab = ref(tabs[0]);
   const allCompanies = ref(false);
+  const allData = useFormData();
 
   const currentTabIndex = computed(() => tabs.findIndex((tab) => currentTab.value === tab));
   const isLastTab = computed(() => currentTabIndex.value === tabs.length - 1);
@@ -28,6 +31,17 @@
 
     currentTab.value = tabs[currentTabIndex.value + 1] || tabs[0];
   }
+
+  function onInvite(): void {
+    currentTab.value = tabs[0];
+    emit("closeClick");
+  }
+
+  onUnmounted(() => {
+    sendInveUserInfo(allData.value).then(() => {
+      allData.value = {};
+    });
+  });
 </script>
 
 <template>
@@ -49,7 +63,11 @@
 
       <div class="modal__content">
         <KeepAlive>
-          <component @company-change="() => allCompanies = false" :active-all-companies="allCompanies" :is="forms[currentTabIndex]" />
+          <component
+            :active-all-companies="allCompanies"
+            :is="forms[currentTabIndex]"
+            @company-change="() => (allCompanies = false)"
+          />
         </KeepAlive>
       </div>
 
@@ -58,14 +76,12 @@
       <div class="modal__footer">
         <div class="user-info-from-toggle" v-if="currentTab === 'Main Info'">
           <ToggleInput v-model="allCompanies" label="Active in all companies" />
-          <span class="text-medium text-md text-primary">
-            Active in all companies
-          </span>
+          <span class="text-medium text-md text-primary">Active in all companies</span>
           <IconInfoVue class="info-icon" />
         </div>
         <div v-else />
 
-        <AppButton v-if="isLastTab">Invite User</AppButton>
+        <AppButton v-if="isLastTab" @click="onInvite">Invite User</AppButton>
         <AppButton v-else @click="nextTab">Next step</AppButton>
       </div>
     </div>
@@ -73,8 +89,8 @@
 </template>
 
 <style scoped>
-  
-  .close-icon, .info-icon {
+  .close-icon,
+  .info-icon {
     fill: var(--c-secondary-dark);
     stroke: var(--c-secondary-dark);
     width: 2rem;
@@ -117,7 +133,7 @@
   }
 
   .user-info-from-toggle {
-    display:  flex;
+    display: flex;
     align-items: center;
     gap: var(--gap-3);
   }

@@ -7,13 +7,11 @@
 </script>
 
 <template>
-  <Transition name="background">
-    <div class="modal" v-if="isOpen">
-      <div class="modal__content">
-        <slot />
-      </div>
+  <div class="modal" v-if="isOpen">
+    <div class="modal__content">
+      <slot />
     </div>
-  </Transition>
+  </div>
 </template>
 
 <style scoped>
@@ -46,16 +44,5 @@
     background-color: var(--white);
     border-radius: var(--radius-md);
     box-shadow: var(--shadow-md);
-  }
-
-  .background-enter-active,
-  .background-leave-active {
-    transition: background-color 250ms ease, opacity 500ms ease;
-  }
-
-  .background-enter-from,
-  .background-leave-to {
-    background-color: rgba(18, 18, 18, 0);
-    opacity: 0;
   }
 </style>

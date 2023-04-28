@@ -1,5 +1,7 @@
 <script setup lang="ts">
-  import { ref, watch } from "vue";
+  import { ref, watch, onDeactivated } from "vue";
+
+  import useFormData from "../../composables/useFormData";
 
   import CheckBox from "../inputs/CheckBox.vue";
   import IconWarning from "../icons/IconWarning.vue";
@@ -50,6 +52,21 @@
 
   watch(allManagment, (newVal) => {
     if (newVal) managementFieldsModel.value = managementFields;
+  });
+
+  onDeactivated(() => {
+    const data = {
+      adminAccess: adminAccess.value,
+      management: managementFieldsModel.value,
+      accessTo: {
+        viewOnly: viewOnly.value,
+        create: create.value,
+        approve: approve.value,
+        pay: pay.value
+      }
+    };
+
+    useFormData(data);
   });
 </script>
 
