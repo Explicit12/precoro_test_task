@@ -1,4 +1,6 @@
 <script setup lang="ts">
+  import { computed } from "vue";
+
   import IconCheckBox from "../icons/IconCheckBox.vue";
 
   interface Props {
@@ -10,6 +12,14 @@
   const emit = defineEmits<{ (e: "update:modelValue", checked: boolean | string[]): void }>();
 
   const warnMassage = "Value attribute is requred when multiple checkboxed used";
+
+  const isChecked = computed(() => {
+    if (Array.isArray(props.modelValue) && props.value) {
+      return props.modelValue.includes(props.value);
+    }
+
+    return props.modelValue;
+  });
 
   function onInput(event: Event): void {
     const target = event.target as HTMLInputElement;
@@ -33,7 +43,14 @@
 
 <template>
   <label class="checkbox">
-    <input v-bind="$attrs" @input="onInput" :value="value" type="checkbox" class="origin-checkbox" />
+    <input
+      v-bind="$attrs"
+      @input="onInput"
+      :value="value"
+      :checked="isChecked"
+      type="checkbox"
+      class="origin-checkbox"
+    />
     <span class="checkmark">
       <IconCheckBox class="checkmark-icon" />
     </span>
