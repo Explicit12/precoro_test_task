@@ -74,9 +74,9 @@
 
       <div class="roles-massage-wrapper">
         <AppMessage class="roles-massage" v-if="currentTab === 'Roles'">
-          <IconInfoVue class="info-icon" />
+          <IconInfoVue class="info-icon roles-massage__info-icon" />
           <span class="roles-massage__text">
-            The user becomes a Power user if at least ONE of the following roles is selected: Approve, View only,
+            The user becomes a <a href="#" class="link">Power user</a> if at least ONE of the following roles is selected: Approve, View only,
             Configuration, Suppliers and Items, Budgets, Warehouse manager.
           </span>
         </AppMessage>
@@ -169,5 +169,10 @@
 
   .roles-massage__text {
     max-width: 580px;
+  }
+  
+  .roles-massage__info-icon {
+    min-width: 24px;
+    min-height: 24px;
   }
 </style>

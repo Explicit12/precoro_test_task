@@ -53,3 +53,8 @@
 .text-danger {
   color: var(--c-danger);
 }
+
+.link {
+  color: var(--c-active);
+  text-decoration: underline;
+}
