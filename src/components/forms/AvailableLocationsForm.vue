@@ -23,8 +23,18 @@
   const selectAll = ref(false);
   const choicedLocations: Ref<string[]> = ref([]);
 
+  function setLocationCheckBoxes(event: Event): void {
+    const isChecked = (event.target as HTMLInputElement).checked;
+    if (!isChecked) {
+      choicedLocations.value = [];
+      return;
+    }
+
+    choicedLocations.value = availableLocations;
+  }
+
   watch(selectAll, (newVal) => {
-    if (newVal) choicedLocations.value = [...availableLocations];
+    if (newVal) choicedLocations.value = availableLocations;
   });
 
   onDeactivated(() => {
@@ -47,7 +57,9 @@
         </span>
         <AppSelect class="locations-form__top-bar__select" v-model="choicedMainLocation" :options="mainLocations" />
       </div>
-      <CheckBox v-model="selectAll">Select All Locations</CheckBox>
+      <CheckBox @input="setLocationCheckBoxes" :checked="choicedLocations.length === availableLocations.length">
+        Select All Locations
+      </CheckBox>
     </div>
 
     <span class="text-medium text-md text-secondary">Available Locations</span>

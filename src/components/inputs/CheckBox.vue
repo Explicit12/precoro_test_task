@@ -1,11 +1,12 @@
 <script setup lang="ts">
-  import { computed } from "vue";
+  import { computed, watch } from "vue";
 
   import IconCheckBox from "../icons/IconCheckBox.vue";
 
   interface Props {
     modelValue?: boolean | string[];
     value?: string;
+    checked?: boolean;
   }
 
   const props = withDefaults(defineProps<Props>(), { modelValue: false });
@@ -18,27 +19,32 @@
       return props.modelValue.includes(props.value);
     }
 
-    return props.modelValue;
+    return props.checked;
   });
 
-  function onInput(event: Event): void {
-    const target = event.target as HTMLInputElement;
+  function setNewModelValue(isChecked: boolean): void {
     const isMultiCheckBox = Array.isArray(props.modelValue);
 
-    // if (!props.modelValue) return;
     if (isMultiCheckBox && !props.value) console.warn(warnMassage);
 
-    if (isMultiCheckBox && target.checked) {
-      emit("update:modelValue", [...(props.modelValue as []), target.value]);
-    } else if (isMultiCheckBox && !target.checked) {
-      const filteredValues = (props.modelValue as []).filter((value) => value !== target.value);
+    if (isMultiCheckBox && isChecked && props.value) {
+      emit("update:modelValue", [...(props.modelValue as []), props.value]);
+    } else if (isMultiCheckBox && !isChecked) {
+      const filteredValues = (props.modelValue as []).filter((value) => value !== props.value);
       emit("update:modelValue", filteredValues);
     }
 
     if (!isMultiCheckBox) {
-      emit("update:modelValue", target.checked);
+      emit("update:modelValue", isChecked);
     }
   }
+
+  function onInput(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    setNewModelValue(target.checked);
+  }
+
+  watch(() => props.checked, setNewModelValue);
 </script>
 
 <template>
@@ -46,10 +52,10 @@
     <input
       v-bind="$attrs"
       @input="onInput"
-      :value="value"
-      :checked="isChecked"
+      :value="modelValue"
       type="checkbox"
       class="origin-checkbox"
+      :checked="isChecked"
     />
     <span class="checkmark">
       <IconCheckBox class="checkmark-icon" />

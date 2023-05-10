@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { ref, watch, onDeactivated } from "vue";
+  import { ref, onDeactivated } from "vue";
 
   import useFormData from "../../composables/useFormData";
 
@@ -7,6 +7,14 @@
   import IconWarning from "../icons/IconWarning.vue";
 
   import type { Ref } from "vue";
+
+  interface CheckRights {
+    viewOnly: string[];
+    create: string[];
+    approve: string[];
+    pay: string[];
+    management: string[];
+  }
 
   const fields = [
     "Warehouse requests",
@@ -20,49 +28,39 @@
 
   const managementFields = ["Configuration", "Suppliers and items", "Budgets", "Warehouse manager", "Reports"];
 
-  const viewOnly: Ref<string[]> = ref([]);
-  const create: Ref<string[]> = ref([]);
-  const approve: Ref<string[]> = ref([]);
-  const pay: Ref<string[]> = ref([]);
-
-  const allViewOnly = ref(false);
-  const allCreate = ref(false);
-  const allApprove = ref(false);
-  const allPay = ref(false);
-
   const adminAccess = ref(false);
-  const allManagment = ref(false);
-  const managementFieldsModel: Ref<string[]> = ref([]);
-
-  watch(allViewOnly, (newVal) => {
-    if (newVal) viewOnly.value = fields;
+  const checkRights: Ref<CheckRights> = ref({
+    viewOnly: [],
+    create: [],
+    approve: [],
+    pay: [],
+    management: [],
   });
 
-  watch(allCreate, (newVal) => {
-    if (newVal) create.value = fields;
-  });
+  function checkWholeCol(event: Event, colName: string): void {
+    const isChecked = (event.target as HTMLInputElement).checked;
 
-  watch(allApprove, (newVal) => {
-    if (newVal) approve.value = fields;
-  });
+    if (!isChecked) {
+      checkRights.value[colName as keyof CheckRights] = [];
+      return;
+    };
 
-  watch(allPay, (newVal) => {
-    if (newVal) pay.value = fields;
-  });
-
-  watch(allManagment, (newVal) => {
-    if (newVal) managementFieldsModel.value = managementFields;
-  });
+    if (colName === "management") {
+      checkRights.value.management = managementFields;
+    } else {
+      checkRights.value[colName as keyof CheckRights] = fields;
+    }
+  }
 
   onDeactivated(() => {
     const data = {
       adminAccess: adminAccess.value,
-      management: managementFieldsModel.value,
+      management: checkRights.value.management,
       accessTo: {
-        viewOnly: viewOnly.value,
-        create: create.value,
-        approve: approve.value,
-        pay: pay.value,
+        viewOnly: checkRights.value.viewOnly,
+        create: checkRights.value.create,
+        approve: checkRights.value.approve,
+        pay: checkRights.value.pay,
       },
     };
 
@@ -82,22 +80,34 @@
 
           <div class="roles-from__section-one__right-top-checkboxes__checkbox">
             <span class="text-medium text-md text-secondary">View only</span>
-            <CheckBox v-model="allViewOnly" />
+            <CheckBox
+              @input="(event: InputEvent) => checkWholeCol(event, 'viewOnly')"
+              :checked="checkRights.viewOnly.length === fields.length"
+            />
           </div>
 
           <div class="roles-from__section-one__right-top-checkboxes__checkbox">
             <span class="text-medium text-md text-secondary">Create</span>
-            <CheckBox v-model="allCreate" />
+            <CheckBox
+              @input="(event: InputEvent) => checkWholeCol(event, 'create')"
+              :checked="checkRights.create.length === fields.length"
+            />
           </div>
 
           <div class="roles-from__section-one__right-top-checkboxes__checkbox">
             <span class="text-medium text-md text-secondary">Approve</span>
-            <CheckBox v-model="allApprove" />
+            <CheckBox
+              @input="(event: InputEvent) => checkWholeCol(event, 'approve')"
+              :checked="checkRights.approve.length === fields.length"
+            />
           </div>
 
           <div class="roles-from__section-one__right-top-checkboxes__checkbox">
             <span class="text-medium text-md text-secondary">Pay</span>
-            <CheckBox v-model="allPay" />
+            <CheckBox
+              @input="(event: InputEvent) => checkWholeCol(event, 'pay')"
+              :checked="checkRights.pay.length === fields.length"
+            />
           </div>
         </div>
 
@@ -106,10 +116,10 @@
             {{ field }}
           </span>
 
-          <CheckBox v-model="viewOnly" :value="field" />
-          <CheckBox v-model="create" :value="field" />
-          <CheckBox v-model="approve" :value="field" />
-          <CheckBox v-model="pay" :value="field" />
+          <CheckBox v-model="checkRights.viewOnly" :value="field" />
+          <CheckBox v-model="checkRights.create" :value="field" />
+          <CheckBox v-model="checkRights.approve" :value="field" />
+          <CheckBox v-model="checkRights.pay" :value="field" />
         </div>
       </div>
 
@@ -117,15 +127,18 @@
         <div>
           <div class="roles-from__section-two__top-checkboxes">
             <span class="text-medium text-md text-secondary">Management</span>
-            <CheckBox v-model="allManagment">
+            <CheckBox
+              @input="(event: InputEvent) => checkWholeCol(event, 'management')"
+              :checked="checkRights.management.length === managementFields.length"
+            >
               <span class="text-semi-bold">All bellow</span>
             </CheckBox>
           </div>
 
-          <div class="roles-from__section-two__managment-checkboxes">
+          <div class="roles-from__section-two__management-checkboxes">
             <CheckBox
-              class="roles-from__section-two__managment-checkboxes__checkbox"
-              v-model="managementFieldsModel"
+              class="roles-from__section-two__management-checkboxes__checkbox"
+              v-model="checkRights.management"
               v-for="(managementField, idx) in managementFields"
               :key="idx"
               :value="managementField"
@@ -213,7 +226,7 @@
     gap: var(--gap-7);
   }
 
-  .roles-from__section-two__managment-checkboxes {
+  .roles-from__section-two__management-checkboxes {
     display: flex;
     flex-direction: column;
     gap: var(--gap-5);
