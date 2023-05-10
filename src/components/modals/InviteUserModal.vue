@@ -2,7 +2,7 @@
   import { ref, computed, onUnmounted } from "vue";
 
   import useFormData from "@/composables/useFormData";
-  import { sendInveUserInfo } from "../../api/api";
+  import { sendInviteUserInfo } from "../../api/api";
 
   import AppButton from "../AppButton.vue";
   import AppModal from "../AppModal.vue";
@@ -39,7 +39,7 @@
   }
 
   onUnmounted(() => {
-    sendInveUserInfo(allData.value).then(() => {
+    sendInviteUserInfo(allData.value).then(() => {
       allData.value = {};
     });
   });
