@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { ref, watch, onDeactivated } from "vue";
+  import { ref, watch, onDeactivated, computed } from "vue";
 
   import useFormData from "@/composables/useFormData";
 
@@ -8,8 +8,7 @@
 
   import type { Ref } from "vue";
 
-  const mainLocations = ["Main Precoro US", "Precoro Poland"];
-  const availableLocations = [
+  const allLocations = [
     "Berlin",
     "Venice Office",
     "USA Office",
@@ -19,9 +18,12 @@
     "Ukraine Kiyv Lukivska 7 Main Office",
   ];
 
-  const choicedMainLocation = ref(mainLocations[0]);
-  const selectAll = ref(false);
+  const choicedMainLocation = ref(allLocations[0]);
   const choicedLocations: Ref<string[]> = ref([]);
+
+  const availableLocations = computed(() => {
+    return allLocations.filter((location) => location !== choicedMainLocation.value);
+  });
 
   function setLocationCheckBoxes(event: Event): void {
     const isChecked = (event.target as HTMLInputElement).checked;
@@ -30,11 +32,11 @@
       return;
     }
 
-    choicedLocations.value = availableLocations;
+    choicedLocations.value = availableLocations.value;
   }
 
-  watch(selectAll, (newVal) => {
-    if (newVal) choicedLocations.value = availableLocations;
+  watch(choicedMainLocation, () => {
+    choicedLocations.value = [];
   });
 
   onDeactivated(() => {
@@ -55,7 +57,11 @@
           Main Location
           <span class="text-danger">*</span>
         </span>
-        <AppSelect class="locations-form__top-bar__select" v-model="choicedMainLocation" :options="mainLocations" />
+        <AppSelect
+          class="locations-form__top-bar__select"
+          v-model="choicedMainLocation"
+          :options="availableLocations"
+        />
       </div>
       <CheckBox @input="setLocationCheckBoxes" :checked="choicedLocations.length === availableLocations.length">
         Select All Locations
