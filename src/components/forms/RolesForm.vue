@@ -182,6 +182,10 @@
     padding: var(--gap-5) 0;
   }
 
+  .roles-from__section-one__right-top-checkboxes {
+    padding-top: 0;
+  }
+
   .roles-from__section-one__right-checkboxes__label {
     justify-self: start;
   }
